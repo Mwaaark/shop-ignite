@@ -1,47 +1,37 @@
 <?php
-session_name('admin');
 session_start();
-
 require('../dbconnect.php');
 
 if (!isset($_SESSION['loggedIn'])) {
-    header('location: login.php');
+    header('location: ../login.php');
     exit;
 }
 
 if (isset($_POST['add_product'])) {
-
     $name           = $_POST['product_name'];
     $category_id    = $_POST['product_category'];
     $price          = $_POST['product_price'];
     $quantity       = $_POST['product_quantity'];
-
     $image_name     = $_FILES['larawan']['name'];
     $tmp_name     = $_FILES['larawan']['tmp_name'];
-
     $add_query = "INSERT INTO products (name, category_id, price, quantity, image_name) VALUES
         ('$name', $category_id, $price, $quantity, '$image_name')";
     $add_result = mysqli_query($conn, $add_query);
-
     if ($add_result) {
         move_uploaded_file($tmp_name, '../img/' . $image_name);
         $add_success = true;
     } else {
         $add_failed = false;
     }
-    
 }
 
 if (isset($_POST['save'])) {
     $id = $_GET['id'];
-
     $name = $_POST['name'];
     $price = $_POST['price'];
     $category = $_POST['category'];
-
     $image_name  = $_FILES['larawan']['name'];
     $tmp_name    = $_FILES['larawan']['tmp_name'];
-
     $edit_query = "
         UPDATE
             products
@@ -67,7 +57,6 @@ $id = $_GET['id'];
 
 $categoryQuery = "SELECT id, name FROM categories";
 $categoryResult = mysqli_query($conn, $categoryQuery);
-
 $view_categoryQuery = "SELECT id, name FROM categories";
 $view_categoryResult = mysqli_query($conn, $view_categoryQuery);
 
@@ -88,7 +77,6 @@ $view_query = "
     ";
 $view_result = mysqli_query($conn, $view_query);
 $view_product = mysqli_fetch_assoc($view_result);
-
 ?>
 
 <!DOCTYPE html>

@@ -2,6 +2,10 @@
 session_start();
 require('dbconnect.php');
 
+if(isset($_GET['id'])){
+    $id = $_GET['id'];
+}
+
 if(isset($_GET['addtocart'])) {
     if (!isset($_SESSION['user_data'])) {
         header('location: login.php');
@@ -20,7 +24,6 @@ if(isset($_GET['addtocart'])) {
             )
             ";
         $addtocart_result = mysqli_query($conn, $addtocart_query);
-
         if ($addtocart_result) {
             $addtocart_success = true;
         } else {
@@ -29,10 +32,10 @@ if(isset($_GET['addtocart'])) {
     }
 }
 
-$show_products_query = "
+$show_query = "
     SELECT
         products.id,
-        products. name,
+        products.name,
         products.price,
         products.image_name,
         categories.name AS category
@@ -41,12 +44,13 @@ $show_products_query = "
     INNER JOIN
         categories
     ON
-        categories.id = category_id
-    ORDER BY
-        products.id
-    DESC
+        categories.id = products.category_id
+    WHERE
+        products.id=$id;
     ";
-$show_products_result = mysqli_query($conn, $show_products_query);
+$show_result = mysqli_query($conn, $show_query);
+$show_product = mysqli_fetch_assoc($show_result);
+
 ?>
 
 <!DOCTYPE html>
@@ -55,7 +59,7 @@ $show_products_result = mysqli_query($conn, $show_products_query);
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Shop Ignite | Home</title>
+    <title>Shop Ignite | <?= $show_product['name']; ?></title>
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dzfkuznwb/image/upload/v1613193824/ShopIgnite/shop_ignite_logo-removebg-preview_xh9wzp.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
@@ -65,28 +69,23 @@ $show_products_result = mysqli_query($conn, $show_products_query);
     <main class="container">
     <?php include('flash.php'); ?>
         <div class="row">
-            <?php while($row = mysqli_fetch_assoc($show_products_result)): ?>
-            <div class="col-sm-4">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <img src="assets/images/<?= $row['image_name']; ?>" class="img-responsive" alt="<?= $row['name']; ?>">
-                    </div>
-                    <div class="panel-footer">
-                        <h3><?= $row['name']; ?></h3>
-                        <p><?= $row['category']; ?></p>
-                        <h4 class="text-muted"> PHP <?= number_format($row['price'], 2); ?></h4>
-                        <div class="btn-group btn-group-justified">
-                                <a href="show.php?id=<?= $row['id']; ?>" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-list-alt"></span> Overview
-                                </a>
-                                <a href="/shop_ignite/?addtocart=<?= $row['id']; ?>" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-shopping-cart"></span> Add to cart
-                                </a>
-                        </div>
-                    </div>
+            <div class="col-sm-7">
+            <div class="well">
+                <img src="img/<?= $show_product['image_name']; ?>" class="img-responsive" style="width:100%" alt="Image">
                 </div>
             </div>
-            <?php endwhile; ?>
+            <div class="col-sm-5">
+            <div class="well">
+                <h3><?= $show_product['name']; ?></h3>
+                <p><?= $show_product['category']; ?></p>
+                <h4 class="text-muted"> PHP <?= number_format($show_product['price'], 2); ?></h4>
+                <a href="/shop_ignite/show.php?addtocart=<?= $show_product['id']; ?>" class="btn btn-default btn-block"><span class="glyphicon glyphicon-shopping-cart"></span> Add to cart</a>
+                <h4>Product description</h4>
+                <p class="text-muted">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dignissim tincidunt ex vel ultricies. Mauris blandit eros ipsum, consectetur venenatis odio accumsan ut. Proin pellentesque facilisis tristique. Aenean volutpat posuere consectetur. Curabitur ullamcorper nisi felis. Donec enim quam, convallis ut erat sed, pretium feugiat tortor. Nunc quis hendrerit neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec consequat sem quis arcu viverra ornare. Donec consequat tristique sagittis. Etiam ornare lacinia odio sed suscipit.
+                </p>
+            </div>
+            </div>
         </div>
     </main>
     <?php include('footer.php'); ?>

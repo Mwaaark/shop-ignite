@@ -1,43 +1,34 @@
 <?php
-session_name('admin');
 session_start();
-
 require('../dbconnect.php');
 
 if (!isset($_SESSION['loggedIn'])) {
-    header('location: login.php');
+    header('location: ../login.php');
     exit;
 }
 
 if (isset($_POST['add_product'])) {
-
     $name           = $_POST['product_name'];
     $category_id    = $_POST['product_category'];
     $price          = $_POST['product_price'];
     $quantity       = $_POST['product_quantity'];
-
-    $image_name     = $_FILES['larawan']['name'];
-    $tmp_name     = $_FILES['larawan']['tmp_name'];
-
-    $add_query = "INSERT INTO products (name, category_id, price, quantity, image_name) VALUES
-        ('$name', $category_id, $price, $quantity, '$image_name')";
+    $image_filename     = $_FILES['image']['filename'];
+    $image_tmpname     = $_FILES['image']['tmp_name'];
+    $add_query = "INSERT INTO products (name, category_id, price, quantity, image_filename) VALUES
+        ('$name', $category_id, $price, $quantity, '$image_filename')";
     $add_result = mysqli_query($conn, $add_query);
-
     if ($add_result) {
-        move_uploaded_file($tmp_name, '../img/' . $image_name);
+        move_uploaded_file($image_tmpname, '../assets/images/' . $image_filename);
         $add_success = true;
     } else {
         $add_failed = false;
     }
-    
 }
 
 if(isset($_GET['delete'])) {
     $id = $_GET['delete'];
-
     $delete_query = "DELETE FROM products WHERE id=$id";
     $delete_result = mysqli_query($conn, $delete_query);
-
     if ($delete_result) {
         $delete_success = true;
     } else {
@@ -47,7 +38,6 @@ if(isset($_GET['delete'])) {
 
 $categoryQuery = "SELECT id, name FROM categories";
 $categoryResult = mysqli_query($conn, $categoryQuery);
-
 $show_query = "
     SELECT
         products.id,
@@ -63,8 +53,6 @@ $show_query = "
         products.category_id = categories.id
     ";
 $show_result = mysqli_query($conn, $show_query);
-
-
 ?>
 
 <!DOCTYPE html>
@@ -116,10 +104,9 @@ $show_result = mysqli_query($conn, $show_query);
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <input type="file" name="larawan" class="form-control">
+                                        <input type="file" name="image_filename" class="form-control">
                                     </div>
                             </div>
-
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">
                                     <span class="glyphicon glyphicon-remove"></span> Close
@@ -190,7 +177,7 @@ $show_result = mysqli_query($conn, $show_query);
                                     <td><?= $row['category']; ?></td>
                                     <td><?= $row['created_at']; ?></td>
                                     <td>
-                                        <a href="view_product.php?id=<?= $row['id']; ?>" target="_blank">
+                                        <a href="show.php?id=<?= $row['id']; ?>" target="_blank">
                                             <span class="glyphicon glyphicon-edit"></span>
                                         </a>
                                         <a href="products.php?delete=<?= $row['id']; ?>">
