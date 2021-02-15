@@ -19,7 +19,7 @@ if (isset($_SESSION['user_data']['id'])) {
             carts.id,
             products.name,
             products.price,
-            products.image_name
+            products.image_filename
         FROM
             products,
             carts
@@ -65,7 +65,7 @@ if (isset($_SESSION['user_data']['id'])) {
                     <?php while($row = mysqli_fetch_assoc($cart_result)): ?>
                         <tr>
                             <td><?= $row['id'] ?></td>
-                            <td><img src="assets/images/<?= $row['image_name']; ?>" alt="<?= $row['name'] ?>" class="center-block img-thumbnail"></td>
+                            <td><img src="assets/images/<?= $row['image_filename']; ?>" alt="<?= $row['name'] ?>" class="center-block img-thumbnail"></td>
                             <td><?= $row['name'] ?></td>
                             <td>PHP <?= number_format($row['price'], 2); ?></td>
                             <td>

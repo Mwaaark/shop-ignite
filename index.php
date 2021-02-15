@@ -34,7 +34,7 @@ $show_products_query = "
         products.id,
         products. name,
         products.price,
-        products.image_name,
+        products.image_filename,
         categories.name AS category
     FROM
         products
@@ -69,7 +69,7 @@ $show_products_result = mysqli_query($conn, $show_products_query);
             <div class="col-sm-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <img src="assets/images/<?= $row['image_name']; ?>" class="img-responsive" alt="<?= $row['name']; ?>">
+                        <img src="assets/images/<?= $row['image_filename']; ?>" class="img-responsive" alt="<?= $row['name']; ?>">
                     </div>
                     <div class="panel-footer">
                         <h3><?= $row['name']; ?></h3>

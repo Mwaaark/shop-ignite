@@ -37,7 +37,7 @@ $show_query = "
         products.id,
         products.name,
         products.price,
-        products.image_name,
+        products.image_filename,
         categories.name AS category
     FROM
         products
@@ -71,7 +71,7 @@ $show_product = mysqli_fetch_assoc($show_result);
         <div class="row">
             <div class="col-sm-7">
             <div class="well">
-                <img src="img/<?= $show_product['image_name']; ?>" class="img-responsive" style="width:100%" alt="Image">
+                <img src="assets/images/<?= $show_product['image_filename']; ?>" class="img-responsive" style="width:100%" alt="Image">
                 </div>
             </div>
             <div class="col-sm-5">

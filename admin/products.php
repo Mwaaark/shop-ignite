@@ -12,13 +12,13 @@ if (isset($_POST['add_product'])) {
     $category_id    = $_POST['product_category'];
     $price          = $_POST['product_price'];
     $quantity       = $_POST['product_quantity'];
-    $image_filename     = $_FILES['image']['filename'];
-    $image_tmpname     = $_FILES['image']['tmp_name'];
+    $image_filename = $_FILES['image']['name'];
+    $tmp_name       = $_FILES['image']['tmp_name'];
     $add_query = "INSERT INTO products (name, category_id, price, quantity, image_filename) VALUES
         ('$name', $category_id, $price, $quantity, '$image_filename')";
     $add_result = mysqli_query($conn, $add_query);
     if ($add_result) {
-        move_uploaded_file($image_tmpname, '../assets/images/' . $image_filename);
+        move_uploaded_file($tmp_name, '../assets/images/' . $image_filename);
         $add_success = true;
     } else {
         $add_failed = false;
@@ -104,7 +104,7 @@ $show_result = mysqli_query($conn, $show_query);
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <input type="file" name="image_filename" class="form-control">
+                                        <input type="file" name="image" class="form-control">
                                     </div>
                             </div>
                             <div class="modal-footer">
