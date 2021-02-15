@@ -45,7 +45,6 @@ if (isset($_SESSION['user_data'])) {
         <?php else: ?>
           <?php if ($_SESSION['user_data']['is_admin'] == 1): ?>
             <li><a href="admin/"><span class="glyphicon glyphicon-lock"></span> Admin Dashboard</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> <?= $_SESSION['user_data']['name'] ?></a></li>
             <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
           <?php else: ?>
             <li><a href="#"><span class="glyphicon glyphicon-user"></span> <?= $_SESSION['user_data']['name'] ?></a></li>
