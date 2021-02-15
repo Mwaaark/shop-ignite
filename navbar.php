@@ -43,12 +43,15 @@ if (isset($_SESSION['user_data'])) {
             <li><a href="register.php"><span class="glyphicon glyphicon-edit"></span> Sign Up</a></li>
             <li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Sign In</a></li>
         <?php else: ?>
-          <?php if ($_SESSION['user_data']['is_admin'] == 1): ?>
-            <li><a href="admin/"><span class="glyphicon glyphicon-lock"></span> Admin Dashboard</a></li>
-            <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+          <?php if (isset($_SESSION['user_data']['is_admin'])): ?>
+            <?php if ($_SESSION['user_data']['is_admin'] == 1): ?>
+              <li><a href="admin/"><span class="glyphicon glyphicon-lock"></span> Admin Dashboard</a></li>
+              <li><a href="#"><span class="glyphicon glyphicon-user"></span> <?= $_SESSION['user_data']['name'] ?></a></li>
+              <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+            <?php endif; ?>
           <?php else: ?>
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> <?= $_SESSION['user_data']['name'] ?></a></li>
-            <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+              <li><a href="#"><span class="glyphicon glyphicon-user"></span> <?= $_SESSION['user_data']['name'] ?></a></li>
+              <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
           <?php endif; ?>
         <?php endif; ?>
       </ul>
